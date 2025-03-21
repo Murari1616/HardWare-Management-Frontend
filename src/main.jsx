@@ -9,7 +9,9 @@ import NotFound from "./components/NotFound";
 import store from "./redux/store.jsx";
 import {
  ProductCreation,
- Product
+ Product,
+ RentCreation,
+ RentList
 } from "./lazyComponents.js";
 import { Toaster } from "./components/ui/toaster";
 import Loader from "./components/Loader/Loader.jsx";
@@ -32,6 +34,22 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <Product />
+          </Suspense>
+        ),
+      },
+      {
+        path: "rent-creation",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <RentCreation />
+          </Suspense>
+        ),
+      },
+      {
+        path: "rent-list",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <RentList />
           </Suspense>
         ),
       },

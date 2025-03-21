@@ -36,18 +36,18 @@ function AppSidebar({ ...props }) {
       url: "#",
       items: [
         // { title: "Product", url: "/pages/product-creation", icon: Dashboard, isActive: location.pathname === "/pages/dashboard" },
-        { title: "Product", url: "/pages/product-creation", icon: Appointments, isActive: location.pathname === "/pages/product-creation" },
-        { title: "Patients", url: "/pages/patients-list", icon: Patients, isActive: location.pathname === "/pages/patients-list" },
-        {
-          title: "Clinic Setup",
-          url: "#",
-          icon: PhysioClinics,
-          Children: [
-            { title: "Healthcare Providers", url: "/pages/physios-list", icon: Physios, isActive: location.pathname === "/pages/physios-list" },
-            { title: "Clinics", url: "/pages/physio-clinics-list", icon: PhysioClinics, isActive: location.pathname === "/pages/physio-clinics-list" },
-            { title: "Healthcare Admins", url: "/pages/admins-list", icon: HealthCareAdmin, isActive: location.pathname === "/pages/admins-list" },
-          ],
-        },
+        { title: "Product", url: "/pages/product", icon: Appointments, isActive: location.pathname === "/pages/product-creation" },
+        { title: "Rent", url: "/pages/rent-list", icon: Patients, isActive: location.pathname === "/pages/rent-list" },
+        // {
+        //   title: "Clinic Setup",
+        //   url: "#",
+        //   icon: PhysioClinics,
+        //   Children: [
+        //     { title: "Healthcare Providers", url: "/pages/physios-list", icon: Physios, isActive: location.pathname === "/pages/physios-list" },
+        //     { title: "Clinics", url: "/pages/physio-clinics-list", icon: PhysioClinics, isActive: location.pathname === "/pages/physio-clinics-list" },
+        //     { title: "Healthcare Admins", url: "/pages/admins-list", icon: HealthCareAdmin, isActive: location.pathname === "/pages/admins-list" },
+        //   ],
+        // },
       ],
     },
   ];

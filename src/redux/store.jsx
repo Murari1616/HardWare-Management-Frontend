@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import productSlice from "./features/productSlice";
 import typeSlice from "./features/typeSlice";
 import workSlice from "./features/workSlice";
+import rentSlice from "./features/rentSlice";
 // import healthcareAdminSlice from "./features/healthcareadminSlice";
 // import physioSlice from './features/physioSlice';
 // import appointmentSlice from "./features/appointmentbookingSlice";
@@ -16,6 +17,7 @@ const store = configureStore({
     products: productSlice,
     types: typeSlice,
     works: workSlice,
+    rent: rentSlice,
     // admin: healthcareAdminSlice,
     // physio: physioSlice,
     // appointment: appointmentSlice,

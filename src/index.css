@@ -58,7 +58,7 @@
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
     --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
+    --muted-foreground: 216 12.2% 83.9%;
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -128,8 +128,18 @@
   }
 }
 
+.react-time-picker__wrapper {
+  border: none !important;
+  box-shadow: none !important;
+}
 
+.react-time-picker {
+  @apply border-[1px] border-gray-200 rounded-md;
+}
 
+.star{
+  @apply text-red-500 font-semibold
+}
 
 
 
@@ -141,4 +151,28 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table tr:first-child th:first-child,
+table tr:first-child td:first-child {
+  border-top-left-radius: 8px;
+}
+
+table tr:first-child th:last-child,
+table tr:first-child td:last-child {
+  border-top-right-radius: 8px;
+}
+
+table tr:last-child td:first-child {
+  border-bottom-left-radius: 8px;
+}
+
+table tr:last-child td:last-child {
+  border-bottom-right-radius: 8px;
 }

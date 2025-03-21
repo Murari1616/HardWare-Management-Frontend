@@ -99,6 +99,7 @@ const ProductCreation = () => {
     }
   };
   const onSubmitWork =async (data) => {
+    try{
     const response = await dispatch(createWork(data))
     if (response.payload.success) {
       toast({
@@ -107,13 +108,15 @@ const ProductCreation = () => {
         variant: "success"
       })
     } else {
-      console.log("ERROR", response)
       toast({
         title: "Error",
         variant: 'destructive',
         description: response.payload
       })
 
+    }}
+    catch(error){
+      console.log("ERROR",error)
     }
   };
 

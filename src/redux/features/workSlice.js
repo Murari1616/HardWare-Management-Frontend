@@ -45,6 +45,28 @@ export const getAllWorksByProductId = createAsyncThunk("works/getAllByProductId"
   }
 });
 
+export const getAllWorkByProductAndTypeId = createAsyncThunk(
+  "works/getAllWorkByProductAndTypeId",
+  async ({ productId, typeId }, { rejectWithValue }) => { 
+    try {
+      const res = await fetch(
+        `${BASE_URL}inventory/work/getAllWorkByProductAndTypeId/${productId}/${typeId}`,
+        { method: "GET" }
+      );
+      const data = await res.json();
+
+      if (data.success) {
+        return data.data || [];
+      } else {
+        return rejectWithValue(data.message);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message || "An error occurred");
+    }
+  }
+);
+
+
 export const deleteWorkById = createAsyncThunk("works/delete", async (id, { rejectWithValue }) => {
   try {
     const res = await fetch(`${BASE_URL}/work/deleteWorkById/${id}`, {
@@ -57,6 +79,24 @@ export const deleteWorkById = createAsyncThunk("works/delete", async (id, { reje
     
     if (data.success) {
       return id;
+    } else {
+      return rejectWithValue(data.message);
+    }
+  } catch (error) {
+    return rejectWithValue(error.message || "An error occurred");
+  }
+});
+
+export const getWorkById = createAsyncThunk("works/get", async (id, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`${BASE_URL}inventory/work/getWorkById/${id}`, {
+      method: "GET",
+      
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      return data.data;
     } else {
       return rejectWithValue(data.message);
     }
@@ -104,6 +144,19 @@ const worksSlice = createSlice({
       });
 
     builder
+      .addCase(getAllWorkByProductAndTypeId.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllWorkByProductAndTypeId.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.works = action.payload;
+      })
+      .addCase(getAllWorkByProductAndTypeId.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+
+    builder
       .addCase(deleteWorkById.pending, (state) => {
         state.isLoading = true;
       })
@@ -112,6 +165,19 @@ const worksSlice = createSlice({
         state.works = state.works.filter((work) => work.id !== action.payload);
       })
       .addCase(deleteWorkById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+
+    builder
+      .addCase(getWorkById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getWorkById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.works =[action.payload];
+      })
+      .addCase(getWorkById.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       });
