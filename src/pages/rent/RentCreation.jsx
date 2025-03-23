@@ -16,6 +16,7 @@ import { getAllWorkByProductAndTypeId, getAllWorksByProductId, getWorkById } fro
 import { getAllProducts } from "@/redux/features/productSlice";
 import { createRent } from "@/redux/features/rentSlice";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const getLocalTime = () => {
     const date = new Date();
@@ -51,6 +52,7 @@ const rentSchema = z.object({
 
 export default function RentDetails() {
     const dispatch = useDispatch();
+    const navigate=useNavigate();
     const {toast}=useToast();
     const { products } = useSelector((state) => state.products);
     const { types } = useSelector((state) => state.types);
@@ -88,6 +90,7 @@ export default function RentDetails() {
                   description: "Rent Created Successfully",
                   variant: "success"
                 })
+                navigate('/rent-list')
               } else {
                 toast({
                   title: "Error",

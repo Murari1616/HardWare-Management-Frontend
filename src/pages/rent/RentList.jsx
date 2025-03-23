@@ -121,7 +121,12 @@ const RentList = () => {
                     description: "Returned Successfully",
                     variant: "success",
                 });
-                dispatch(getAllRents()); // ✅ Refresh the rent list after update
+                dispatch(getAllRents({
+                    page: pagination.pageIndex + 1,
+                    limit: pagination.pageSize,
+                    search: searchQuery,
+                    date: selectedDate
+                }));
             } else {
                 toast({
                     title: "Error",
@@ -154,10 +159,10 @@ const RentList = () => {
         <div className="w-full h-full">
             <div className="w-full h-full flex flex-col bg-white rounded-lg">
                 <div className="m-4 flex justify-between">
-                    <Button onClick={() => navigate('/pages/rent-creation')}>
+                    <Button onClick={() => navigate('/rent-creation')}>
                         Rent Creation <Plus />
                     </Button>
-                    <div className="flex gap-4 w-full justify-end">
+                    <div className="flex gap-4 w-full justify-end w-fit">
                         <Input
                             type="date"
                             className="w-36"
