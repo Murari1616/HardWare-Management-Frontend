@@ -4,6 +4,9 @@ import { BASE_URL } from "@/appConstants";
 const initialState = {
     rents: [],
     isLoading: false,
+    totalRecords: 0,
+    currentPage: 1,
+    totalPages: 0,
     error: null,
     status: null,
 };
@@ -20,7 +23,7 @@ export const createRent = createAsyncThunk(
             });
             const data = await res.json();
             if (data.success) {
-                
+
                 return data;
             }
             return rejectWithValue(data.message);
@@ -30,18 +33,80 @@ export const createRent = createAsyncThunk(
     }
 );
 
+// Update Rent
+export const updateRent = createAsyncThunk(
+    "rents/updateRent",
+    async ({ id, updatedData }, { rejectWithValue }) => {
+        console.log("ID", id, updatedData)
+        try {
+            const res = await fetch(`${BASE_URL}rent/updateRent/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify(updatedData),
+            });
+            const data = await res.json();
+            if (data.success) return { id, updatedData: data.data };
+            return rejectWithValue(data.message);
+        } catch (error) {
+            return rejectWithValue(error.message || "An error occurred");
+        }
+    }
+);
 
 // Get All Rents
-export const getAllRents = createAsyncThunk("rents/getAll", async (_, { rejectWithValue }) => {
-    try {
-        const res = await fetch(`${BASE_URL}rent/getAllRents`, );
-        const data = await res.json();
-        if (data.success) return data;
-        return rejectWithValue(data.message);
-    } catch (error) {
-        return rejectWithValue(error.message || "An error occurred");
+// export const getAllRents = createAsyncThunk("rents/getAll", async (_, { rejectWithValue }) => {
+//     try {
+//         const res = await fetch(`${BASE_URL}rent/getAllRents`,);
+//         const data = await res.json();
+//         if (data.success) return data;
+//         return rejectWithValue(data.message);
+//     } catch (error) {
+//         return rejectWithValue(error.message || "An error occurred");
+//     }
+// });
+
+export const getAllRents = createAsyncThunk(
+    "rents/getAllRents",
+    async ({ page = 1, limit = 20, search, date }, { rejectWithValue }) => {
+        try {
+            let url = `${BASE_URL}rent/getAllRents?page=${page}&limit=${limit}`;
+
+            if (search) {
+                url += `&search=${encodeURIComponent(search)}`;
+            }
+
+            if (date) {
+                url += `&date=${encodeURIComponent(date)}`;
+            }
+
+            const res = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                return data;
+            } else {
+                const errorMsg =
+                    data.error?.errors?.[0]?.message ||
+                    data.message ||
+                    "Failed to fetch rents";
+                return rejectWithValue(errorMsg);
+            }
+        } catch (error) {
+            const errorMsg =
+                error instanceof Error ? error.message : "An error occurred";
+            return rejectWithValue(errorMsg);
+        }
     }
-});
+);
+
 
 // Delete Rent
 export const deleteRentById = createAsyncThunk("rents/delete", async (id, { rejectWithValue }) => {
@@ -76,7 +141,47 @@ const rentsSlice = createSlice({
                 state.error = action.payload;
                 state.status = "fail";
             })
-            .addCase(getAllRents.fulfilled, (state, action) => { state.rents = action.payload.data; })
+            .addCase(updateRent.pending, (state) => {
+                state.isLoading = true;
+                state.status = null;
+            })
+            .addCase(updateRent.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.status = "success";
+                const index = state.rents.findIndex((rent) => rent.id === action.payload.id);
+                if (index !== -1) {
+                    state.rents[index] = { ...state.rents[index], ...action.payload.updatedData };
+                }
+            })
+            .addCase(updateRent.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+                state.status = "fail";
+            })
+
+        // .addCase(getAllRents.fulfilled, (state, action) => { state.rents = action.payload.data; })
+        // Get Appointment By ID
+        builder
+            .addCase(getAllRents.pending, (state) => {
+                state.isLoading = true;
+                state.status = null;
+            })
+            .addCase(getAllRents.fulfilled, (state, action) => {
+                if (action.payload.data) {
+                    state.totalRecords = action.payload.data.totalRecords || 0;
+                    state.rents = action.payload.data.data ?? [];
+                    state.currentPage = action.payload.data.currentPage || 0;
+                    state.totalPages = action.payload.data.totalPages || 0;
+                    state.isLoading = false;
+                }
+            })
+
+            .addCase(getAllRents.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+                state.status = "fail";
+            })
+
             .addCase(deleteRentById.fulfilled, (state, action) => { state.rents = state.rents.filter((p) => p.id !== action.payload); });
     },
 });

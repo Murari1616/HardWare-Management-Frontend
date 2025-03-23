@@ -13,13 +13,9 @@ import {
   useSidebar 
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import Dashboard from "@/assets/svgs/sideBarMode/Dashboard";
 import Appointments from "@/assets/svgs/sideBarMode/Appointments";
-import Patients from "@/assets/svgs/sideBarMode/Patients";
-import Physios from "@/assets/svgs/sideBarMode/Physios";
-import PhysioClinics from "@/assets/svgs/sideBarMode/PhysioClinics";
-import HealthCareAdmin from "@/assets/svgs/sideBarMode/HealthCareAdmin";
 import NotificationIcon from "@/assets/svgs/NotificationIcon";
+import { Drill } from "lucide-react";
 
 function AppSidebar({ ...props }) {
   const location = useLocation();
@@ -36,8 +32,8 @@ function AppSidebar({ ...props }) {
       url: "#",
       items: [
         // { title: "Product", url: "/pages/product-creation", icon: Dashboard, isActive: location.pathname === "/pages/dashboard" },
-        { title: "Product", url: "/pages/product", icon: Appointments, isActive: location.pathname === "/pages/product-creation" },
-        { title: "Rent", url: "/pages/rent-list", icon: Patients, isActive: location.pathname === "/pages/rent-list" },
+        { title: "Product", url: "/product", icon: Drill, isActive: location.pathname === "/product-creation" },
+        { title: "Rent", url: "/rent-list", icon: Appointments, isActive: location.pathname === "/rent-list" },
         // {
         //   title: "Clinic Setup",
         //   url: "#",

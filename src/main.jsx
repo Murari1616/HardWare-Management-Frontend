@@ -22,13 +22,21 @@ import Loader from "./components/Loader/Loader.jsx";
 // Create Router
 const router = createBrowserRouter([
   {
-    path: "/pages",
+    path: "/",
     element: (
       <Suspense fallback={<Loader />}>
         <Layout />
       </Suspense>
     ),
     children: [
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<Loader />}>
+            <RentList />
+          </Suspense>
+        ),
+      },
       {
         path: "product",
         element: (
@@ -188,15 +196,15 @@ const router = createBrowserRouter([
   //   ],
   //   errorElement: <NotFound />,
   // },
-  {
-    path: "/ehr",
-    element: (
-      <Suspense fallback={<Loader />}>
-        <ProductCreation/>
-      </Suspense>
-    ),
-    errorElement: <NotFound />,
-  },
+  // {
+  //   path: "/ehr",
+  //   element: (
+  //     <Suspense fallback={<Loader />}>
+  //       <ProductCreation/>
+  //     </Suspense>
+  //   ),
+  //   errorElement: <NotFound />,
+  // },
   // {
   //   path: "/",
   //   element: (

@@ -12,7 +12,6 @@ export default function WorksTable() {
   const selectedProductId = watch("product");
   const {products,isLoading:productLoading}=useSelector((state)=>state.products)
   const { works, isLoading } = useSelector((state) => state.works);
-console.log("WORKS",works)
   useEffect(() => {
     if (selectedProductId) {
       dispatch(getAllWorksByProductId(selectedProductId));
