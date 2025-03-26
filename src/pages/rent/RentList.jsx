@@ -3,12 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { getAllRents, updateRent } from "@/redux/features/rentSlice";
+import { deleteRentById, getAllRents, updateRent } from "@/redux/features/rentSlice";
 import { Ellipsis, Loader, Plus, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ConfirmDialog from "@/components/ConfirmDilaog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const RentList = () => {
     const dispatch = useDispatch();
@@ -20,10 +22,11 @@ const RentList = () => {
         pageIndex: 0,
         pageSize: 10,
     });
-    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedDate, setSelectedDate] = useState();
+    const [selectedDays, setSelectedDays] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedRent, setSelectedRent] = useState(null);
+    const [selectedRent, setSelectedRent] = useState({ data: null, mode: null });
     const [visiblePages, setVisiblePages] = useState(5);
 
     const handleSearch = () => {
@@ -87,11 +90,42 @@ const RentList = () => {
     };
 
     const handleConfirm = () => {
-        if (selectedRent) {
-            handleSubmit(selectedRent); // Call API
-            setIsDialogOpen(false); // Close modal
+        if (selectedRent && selectedRent.mode === 'return') {
+            handleSubmit(selectedRent.data);
+            setIsDialogOpen(false);
+        }
+
+        if (selectedRent && selectedRent.mode === 'delete') {
+            console.log(selectedRent)
+            handleDelete(selectedRent.rent._id)
+            setIsDialogOpen(false);
         }
     };
+
+    const handleDelete = async (id) => {
+        try {
+            const response = await dispatch(deleteRentById(id));
+            console.log("RESPONSE",response)
+            if (response.meta.requestStatus==='fulfilled') {
+                console.log("HIHI")
+                toast({
+                    title: "Success",
+                    description: 'Rent Cancelled Succesfully',
+                    variant: "success",
+                });
+                await dispatch(getAllRents({
+                    page: pagination.pageIndex + 1,
+                    limit: pagination.pageSize,
+                    search: searchQuery,
+                    date: selectedDate
+                }));
+            }
+        }
+        catch (error) {
+            console.log("ERROR", error)
+        }
+    }
+
 
     // Submit function to mark rent as returned
     const handleSubmit = async (rent) => {
@@ -145,11 +179,12 @@ const RentList = () => {
             page: pagination.pageIndex + 1,
             limit: pagination.pageSize,
             search: searchQuery,
-            date: selectedDate
+            date: selectedDate,
+            days: selectedDays
         }));
     }, [pagination.pageIndex,
     pagination.pageSize,
-        searchQuery, selectedDate]);
+        searchQuery, selectedDate, selectedDays]);
 
     if (isLoading) {
         return (<div className="mt-72"><Loader /></div>)
@@ -162,13 +197,42 @@ const RentList = () => {
                     <Button onClick={() => navigate('/rent-creation')}>
                         Rent Creation <Plus />
                     </Button>
-                    <div className="flex gap-4 w-full justify-end w-fit">
+                    <div className="flex gap-4 justify-end w-fit">
                         <Input
                             type="date"
                             className="w-36"
                             defaultValue={new Date().toLocaleDateString("en-CA")}
+                            value={selectedDate}
                             onChange={handleDateChange}
                         />
+                        <Select value={selectedDays} onValueChange={(value) => {
+                            setSelectedDays(value)
+                        }}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Time" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={7}>1 Week</SelectItem>
+                                <SelectItem value={10}>10 Days</SelectItem>
+                                <SelectItem value={15}>15 Days</SelectItem>
+                                <SelectItem value={20}>20 Days</SelectItem>
+                                <SelectItem value={30}>1 Month</SelectItem>
+                                <SelectItem value={50}>50 Days</SelectItem>
+                                <SelectItem value={90}>3 Months</SelectItem>
+                                <SelectItem value={100}>100 Days</SelectItem>
+                                <SelectItem value={120}>4 Months</SelectItem>
+                                <SelectItem value={150}>5 Months</SelectItem>
+                                <SelectItem value={180}>6 Months</SelectItem>
+                                <SelectItem value={210}>7 Months</SelectItem>
+                                <SelectItem value={240}>8 Months</SelectItem>
+                                <SelectItem value={270}>9 Months</SelectItem>
+                                <SelectItem value={300}>10 Months</SelectItem>
+                                <SelectItem value={330}>11 Months</SelectItem>
+                                <SelectItem value={365}>1 Year</SelectItem>
+                                <SelectItem value={520}>18 Months</SelectItem>
+                                <SelectItem value={730}>2 Years</SelectItem>
+                            </SelectContent>
+                        </Select>
                         <div className="flex items-center gap-4 lg:w-64 md:w-[400px] w-full justify-between">
                             <div className="relative w-full lg:w-64">
                                 <Input
@@ -246,7 +310,7 @@ const RentList = () => {
                                                                 className="border border-black rounded-md w-5 h-5 flex justify-center items-center"
                                                                 onClick={() => {
                                                                     if (!rent.returnDate) {
-                                                                        setSelectedRent(rent);
+                                                                        setSelectedRent({ rent, mode: "return" });
                                                                         setIsDialogOpen(true); // Open modal
                                                                     }
                                                                 }}
@@ -258,21 +322,39 @@ const RentList = () => {
                                                             <p>Return</p>
                                                         </TooltipContent>
                                                     </Tooltip>
-                                                    <Tooltip>
-                                                        <TooltipTrigger>
-                                                            <Ellipsis />
-                                                        </TooltipTrigger>
-                                                        <TooltipContent className="bg-white border border-gray-200 shadow-md">
-                                                            <p>More</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger>
+                                                            <Tooltip>
+                                                                <TooltipTrigger>
+                                                                    <Ellipsis />
+                                                                </TooltipTrigger>
+                                                                <TooltipContent className="bg-white border border-gray-200 shadow-md">
+                                                                    <p>More</p>
+                                                                </TooltipContent>
+                                                            </Tooltip>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem>
+                                                                <Link>View</Link>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem>
+                                                                <button onClick={() => {
+                                                                    if (selectedRent) {
+                                                                        setSelectedRent({rent,mode:'delete'});
+                                                                        setIsDialogOpen(true)
+
+                                                                    }
+                                                                }}>Cancel</button>
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan="10" className="text-center">
+                                        <TableCell colSpan="13" className="text-center">
                                             No rents found
                                         </TableCell>
                                     </TableRow>
@@ -340,8 +422,8 @@ const RentList = () => {
                 isOpen={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}
                 onConfirm={handleConfirm}
-                title="Confirm Return"
-                description="Are you sure you want to mark this rent as returned?"
+                title={`Confirm ${selectedRent.mode==='return' ?"Return" : "Cancel"}`}
+                description={`Are you sure you want ${selectedRent.mode==='return' ? 'to mark this rent as returned?' : 'to cancel this rent?'}`}
             />
         </div>
     );

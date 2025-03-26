@@ -168,7 +168,7 @@ export default function RentDetails() {
                                 setValue("productId", value);
                             }}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select a product" />
+                                    <SelectValue placeholder="Select a product"/>
                                 </SelectTrigger>
                                 <SelectContent>
                                     {products?.map((product) => (

@@ -70,7 +70,7 @@ export const updateRent = createAsyncThunk(
 
 export const getAllRents = createAsyncThunk(
     "rents/getAllRents",
-    async ({ page = 1, limit = 20, search, date }, { rejectWithValue }) => {
+    async ({ page = 1, limit = 20, search, date,days }, { rejectWithValue }) => {
         try {
             let url = `${BASE_URL}rent/getAllRents?page=${page}&limit=${limit}`;
 
@@ -80,6 +80,10 @@ export const getAllRents = createAsyncThunk(
 
             if (date) {
                 url += `&date=${encodeURIComponent(date)}`;
+            }
+
+            if (days) {
+                url += `&days=${encodeURIComponent(days)}`;
             }
 
             const res = await fetch(url, {
@@ -110,8 +114,9 @@ export const getAllRents = createAsyncThunk(
 
 // Delete Rent
 export const deleteRentById = createAsyncThunk("rents/delete", async (id, { rejectWithValue }) => {
+    console.log("ID",id)
     try {
-        const res = await fetch(`${BASE_URL}/rent/deleteRent/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
+        const res = await fetch(`${BASE_URL}rent/deleteRent/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
         const data = await res.json();
         if (data.success) return id;
         return rejectWithValue(data.message);
