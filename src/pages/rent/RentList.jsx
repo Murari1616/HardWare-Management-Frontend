@@ -91,7 +91,8 @@ const RentList = () => {
 
     const handleConfirm = () => {
         if (selectedRent && selectedRent.mode === 'return') {
-            handleSubmit(selectedRent.data);
+            console.log("HIHIH",selectedRent)
+            handleSubmit(selectedRent.rent);
             setIsDialogOpen(false);
         }
 
@@ -107,7 +108,6 @@ const RentList = () => {
             const response = await dispatch(deleteRentById(id));
             console.log("RESPONSE",response)
             if (response.meta.requestStatus==='fulfilled') {
-                console.log("HIHI")
                 toast({
                     title: "Success",
                     description: 'Rent Cancelled Succesfully',
@@ -136,7 +136,7 @@ const RentList = () => {
             second: "2-digit",
             hour12: false,
         });
-
+console.log("TEST",rent)
         const updatedRent = {
             ...rent,
             returnDate,
@@ -145,7 +145,7 @@ const RentList = () => {
             closingAmount: calculateClosingAmount(rent),
             totalRentDays: calculateDays(rent.date),
         };
-
+console.log("update",updatedRent)
         try {
             const response = await dispatch(updateRent({ id: rent._id, updatedData: updatedRent }));
 
@@ -342,7 +342,6 @@ const RentList = () => {
                                                                     if (selectedRent) {
                                                                         setSelectedRent({rent,mode:'delete'});
                                                                         setIsDialogOpen(true)
-
                                                                     }
                                                                 }}>Cancel</button>
                                                             </DropdownMenuItem>
