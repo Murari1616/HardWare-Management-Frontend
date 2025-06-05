@@ -14,9 +14,7 @@ import {
   useSidebar 
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import Appointments from "@/assets/svgs/sideBarMode/Appointments";
-import NotificationIcon from "@/assets/svgs/NotificationIcon";
-import { Drill } from "lucide-react";
+import { Drill,NotepadText } from "lucide-react";
 
 function AppSidebar({ ...props }) {
   const location = useLocation();
@@ -34,7 +32,7 @@ function AppSidebar({ ...props }) {
       items: [
         // { title: "Product", url: "/pages/product-creation", icon: Dashboard, isActive: location.pathname === "/pages/dashboard" },
         { title: "Product", url: "/product", icon: Drill, isActive: location.pathname === "/product-creation" },
-        { title: "Rent", url: "/rent-list", icon: Appointments, isActive: location.pathname === "/rent-list" },
+        { title: "Rent", url: "/rent-list", icon: NotepadText, isActive: location.pathname === "/rent-list" },
         // {
         //   title: "Clinic Setup",
         //   url: "#",
@@ -105,10 +103,10 @@ function AppSidebar({ ...props }) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <Link to="./notifications" className="flex gap-5 items-center px-4 py-2 rounded-md transition-all text-muted hover:bg-gray-100">
+        {/* <Link to="./notifications" className="flex gap-5 items-center px-4 py-2 rounded-md transition-all text-muted hover:bg-gray-100">
           <NotificationIcon />
           <span className="text-xs">Notifications</span>
-        </Link>
+        </Link> */}
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
