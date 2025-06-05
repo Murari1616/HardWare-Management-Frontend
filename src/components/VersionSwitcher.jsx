@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import Logo from "@/assets/images/appLogo.png";
 

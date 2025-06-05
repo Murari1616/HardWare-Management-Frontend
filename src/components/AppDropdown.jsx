@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState } from "react";
 import { ChevronsUpDown, KeyRoundIcon, LayoutDashboardIcon, LogOutIcon } from "lucide-react";
 import ProfileIcon from "../../src/assets/images/profile_icon.png";

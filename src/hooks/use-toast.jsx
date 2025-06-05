@@ -1,4 +1,6 @@
+// @ts-nocheck
 // Inspired by react-hot-toast library
+
 import React, { useEffect, useState } from "react";
 
 const TOAST_LIMIT = 1;

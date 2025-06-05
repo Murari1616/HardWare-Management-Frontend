@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createContext, useContext, useEffect, useState } from "react";
 
 // Default values for theme

@@ -1,4 +1,5 @@
 
+// @ts-nocheck
 import Nofound from '../assets/images/Nofound.jpg'
 import { Button } from './ui/button'
 

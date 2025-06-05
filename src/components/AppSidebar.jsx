@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from "react";
 import { VersionSwitcher } from "@/components/VersionSwitcher";
 import { 

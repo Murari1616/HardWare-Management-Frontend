@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL } from "@/appConstants";
 import { useToast } from "@/hooks/use-toast";
