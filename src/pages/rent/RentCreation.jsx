@@ -52,8 +52,8 @@ const rentSchema = z.object({
 
 export default function RentDetails() {
     const dispatch = useDispatch();
-    const navigate=useNavigate();
-    const {toast}=useToast();
+    const navigate = useNavigate();
+    const { toast } = useToast();
     const { products } = useSelector((state) => state.products);
     const { types } = useSelector((state) => state.types);
     const { works } = useSelector((state) => state.works);
@@ -75,33 +75,33 @@ export default function RentDetails() {
         return date;
     };
 
-    const onSubmit = async(data) => {
+    const onSubmit = async (data) => {
         const formattedData = {
             ...data,
             inTime: new Date().toLocaleTimeString("en-IN", { hour12: false }),
             Aadhar: data.Aadhar === "true",
         };
 
-        try{
-           const response=await dispatch(createRent(formattedData))
+        try {
+            const response = await dispatch(createRent(formattedData))
             if (response.payload.success) {
                 toast({
-                  title: 'Success',
-                  description: "Rent Created Successfully",
-                  variant: "success"
+                    title: 'Success',
+                    description: "Rent Created Successfully",
+                    variant: "success"
                 })
                 navigate('/rent-list')
-              } else {
+            } else {
                 toast({
-                  title: "Error",
-                  variant: 'destructive',
-                  description: response.payload
+                    title: "Error",
+                    variant: 'destructive',
+                    description: response.payload
                 })
-          
-              }
+
+            }
         }
-        catch(error){
-            
+        catch (error) {
+
         }
     }
     console.log(new Date().toLocaleDateString("en-CA"));
@@ -161,14 +161,14 @@ export default function RentDetails() {
                             {errors.inTime && <p className="text-red-500">{errors.inTime.message}</p>}
                         </div>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2">
                         <div className="w-full">
                             <Label className='flex gap-[4px]' >Product<span className="star">*</span></Label>
                             <Select onValueChange={(value) => {
                                 setValue("productId", value);
                             }}>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select a product"/>
+                                    <SelectValue placeholder="Select a product" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {products?.map((product) => (
@@ -218,65 +218,71 @@ export default function RentDetails() {
                             {errors.workId && <p className="text-red-500 text-xs">{errors.workId.message}</p>}
                         </div>
                     </div>
-                    <div className="flex gap-4">
-                        <div className="w-full">
-                            <Label className='flex gap-[4px]' >Rent<span className="star">*</span></Label>
-                            <Input {...register("rent")} placeholder='Enter Rent' />
-                            {errors.rent && <p className="text-red-500 text-xs">{errors.rent.message}</p>}
-                        </div>
+                    <div className="flex lg:flex-row md:flex-row flex-col gap-4">
+                        <div className="w-full flex gap-4">
+                            <div className="w-full">
+                                <Label className='flex gap-[4px]' >Rent<span className="star">*</span></Label>
+                                <Input {...register("rent")} placeholder='Rent' />
+                                {errors.rent && <p className="text-red-500 text-xs">{errors.rent.message}</p>}
+                            </div>
 
-                        <div className="w-full">
-                            <Label className='flex gap-[4px]' >Advance<span className="star">*</span></Label>
-                            <Input {...register("advance")} placeholder='Enter Advance' />
-                            {errors.advance && <p className="text-red-500 text-xs">{errors.advance.message}</p>}
+                            <div className="w-full">
+                                <Label className='flex gap-[4px]' >Advance<span className="star">*</span></Label>
+                                <Input {...register("advance")} placeholder='Advance' />
+                                {errors.advance && <p className="text-red-500 text-xs">{errors.advance.message}</p>}
+                            </div>
                         </div>
+                        <div className='w-full flex gap-4'>
+                            <div className="w-full">
+                                <Label className='flex gap-[4px]' >Customer Name<span className="star">*</span></Label>
+                                <Input {...register("customerName")} placeholder='Customer Name' />
+                                {errors.customerName && <p className="text-red-500 text-xs">{errors.customerName.message}</p>}
+                            </div>
 
-                        <div className="w-full">
-                            <Label className='flex gap-[4px]' >Customer Name<span className="star">*</span></Label>
-                            <Input {...register("customerName")} placeholder='Enter Customer Name' />
-                            {errors.customerName && <p className="text-red-500 text-xs">{errors.customerName.message}</p>}
-                        </div>
-
-                        <div className="w-full">
-                            <Label className='flex gap-[4px]' >Phone Number<span className="star">*</span></Label>
-                            <Input {...register("phoneNumber")} placeholder='Enter Phone Number' />
-                            {errors.phoneNumber && <p className="text-red-500 text-xs">{errors.phoneNumber.message}</p>}
+                            <div className="w-full">
+                                <Label className='flex gap-[4px]' >Phone Number<span className="star">*</span></Label>
+                                <Input {...register("phoneNumber")} placeholder='Phone Number' />
+                                {errors.phoneNumber && <p className="text-red-500 text-xs">{errors.phoneNumber.message}</p>}
+                            </div>
                         </div>
                     </div>
-                    <div className="flex gap-4">
-                        <div className="w-full">
-                            <Label>Aadhar No</Label>
-                            <Input {...register("AadharNo")} placeholder='Enter Aadhar Number' />
+                    <div className="flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2">
+                        <div className="w-full flex gap-4">
+                            <div className="w-full">
+                                <Label>Aadhar No</Label>
+                                <Input {...register("AadharNo")} placeholder='Aadhar Number' />
+                            </div>
+                            <div className="w-full">
+                                <Label>Reference Name</Label>
+                                <Input {...register("referenceName")} placeholder='Reference Name' />
+                            </div>
                         </div>
-                        <div className="w-full">
-                            <Label>Reference Name</Label>
-                            <Input {...register("referenceName")} placeholder='Enter Reference Name' />
-                        </div>
+                        <div className="w-full flex gap-4">
+                            <div className="w-full">
+                                <Label>Reference Phone Number</Label>
+                                <Input {...register("referencePhoneNumber")} placeholder='Reference Phone Number' />
+                            </div>
+                            <div className="w-full space-y-4">
+                                <Label>Extras</Label>
+                                <Input {...register("extras")} placeholder='Extras' />
+                            </div>
 
-                        <div className="w-full">
-                            <Label>Reference Phone Number</Label>
-                            <Input {...register("referencePhoneNumber")} placeholder='Enter Reference Phone Number' />
-                        </div>
-                        <div className="w-full">
-                            <Label>Extras</Label>
-                            <Input {...register("extras")} placeholder='Enter Extras' />
-                        </div>
-
-                        <div className="w-[60%]">
-                            <Label>Extra Cost</Label>
-                            <Input type="number" {...register("extraCost")} placeholder='Enter Extra Cost' />
+                            <div className="w-[60%]">
+                                <Label>Extra Cost</Label>
+                                <Input type="number" {...register("extraCost")} placeholder='Extra Cost' />
+                            </div>
                         </div>
                     </div>
                     <div className="flex gap-4">
                         <div className="w-full">
                             <Label>Address</Label>
-                            <Input {...register("address")} placeholder='Enter Address' />
+                            <Input {...register("address")} placeholder='Address' />
                         </div>
 
 
                         <div className="w-full">
                             <Label>Additional Info</Label>
-                            <Input {...register("additionalInfo")} placeholder='Enter Add Info' />
+                            <Input {...register("additionalInfo")} placeholder='Add Info' />
                         </div>
 
                     </div>
@@ -290,7 +296,7 @@ export default function RentDetails() {
                                 <div className="flex gap-4">
                                     <Label>Aadhar</Label>
                                     <div className="flex gap-4">
-                                        <label className="flex items-center space-x-2">
+                                        <label className="flex items-cspace-x-2">
                                             <input
                                                 type="radio"
                                                 value="true"
@@ -300,7 +306,7 @@ export default function RentDetails() {
                                             />
                                             <span>Yes</span>
                                         </label>
-                                        <label className="flex items-center space-x-2">
+                                        <label className="flex items-cspace-x-2">
                                             <input
                                                 type="radio"
                                                 value="false"
@@ -317,7 +323,9 @@ export default function RentDetails() {
 
                         </div>
 
-                        <Button type="submit" className="w-[12%]">Submit</Button>
+                    </div>
+                    <div className="w-full flex justify-end">
+                        <Button type="submit" className="lg:w-[12%] md:w-[12%] w-full">Submit</Button>
                     </div>
                 </form>
             </CardContent>

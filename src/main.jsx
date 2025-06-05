@@ -46,6 +46,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "productCreation",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <ProductCreation />
+          </Suspense>
+        ),
+      },
+      {
         path: "rent-creation",
         element: (
           <Suspense fallback={<Loader />}>

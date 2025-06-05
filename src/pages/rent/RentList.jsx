@@ -91,7 +91,7 @@ const RentList = () => {
 
     const handleConfirm = () => {
         if (selectedRent && selectedRent.mode === 'return') {
-            console.log("HIHIH",selectedRent)
+            console.log("HIHIH", selectedRent)
             handleSubmit(selectedRent.rent);
             setIsDialogOpen(false);
         }
@@ -106,8 +106,8 @@ const RentList = () => {
     const handleDelete = async (id) => {
         try {
             const response = await dispatch(deleteRentById(id));
-            console.log("RESPONSE",response)
-            if (response.meta.requestStatus==='fulfilled') {
+            console.log("RESPONSE", response)
+            if (response.meta.requestStatus === 'fulfilled') {
                 toast({
                     title: "Success",
                     description: 'Rent Cancelled Succesfully',
@@ -136,7 +136,7 @@ const RentList = () => {
             second: "2-digit",
             hour12: false,
         });
-console.log("TEST",rent)
+        console.log("TEST", rent)
         const updatedRent = {
             ...rent,
             returnDate,
@@ -145,7 +145,6 @@ console.log("TEST",rent)
             closingAmount: calculateClosingAmount(rent),
             totalRentDays: calculateDays(rent.date),
         };
-console.log("update",updatedRent)
         try {
             const response = await dispatch(updateRent({ id: rent._id, updatedData: updatedRent }));
 
@@ -193,18 +192,20 @@ console.log("update",updatedRent)
     return (
         <div className="w-full h-full">
             <div className="w-full h-full flex flex-col bg-white rounded-lg">
-                <div className="m-4 flex justify-between">
-                    <Button onClick={() => navigate('/rent-creation')}>
-                        Rent Creation <Plus />
-                    </Button>
-                    <div className="flex gap-4 justify-end w-fit">
+                <div className="m-4 flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2 justify-between">
+                    <div className="flex w-full justify-between lg:px-4 md:px-4">
+                        <Button onClick={() => navigate('/rent-creation')}>
+                            Rent Creation <Plus />
+                        </Button>
                         <Input
                             type="date"
-                            className="w-36"
+                            className="max-w-40"
                             defaultValue={new Date().toLocaleDateString("en-CA")}
                             value={selectedDate}
                             onChange={handleDateChange}
                         />
+                    </div>
+                    <div className="flex gap-4 justify-end w-fit">
                         <Select value={selectedDays} onValueChange={(value) => {
                             setSelectedDays(value)
                         }}>
@@ -340,7 +341,7 @@ console.log("update",updatedRent)
                                                             <DropdownMenuItem>
                                                                 <button onClick={() => {
                                                                     if (selectedRent) {
-                                                                        setSelectedRent({rent,mode:'delete'});
+                                                                        setSelectedRent({ rent, mode: 'delete' });
                                                                         setIsDialogOpen(true)
                                                                     }
                                                                 }}>Cancel</button>
@@ -421,8 +422,8 @@ console.log("update",updatedRent)
                 isOpen={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}
                 onConfirm={handleConfirm}
-                title={`Confirm ${selectedRent.mode==='return' ?"Return" : "Cancel"}`}
-                description={`Are you sure you want ${selectedRent.mode==='return' ? 'to mark this rent as returned?' : 'to cancel this rent?'}`}
+                title={`Confirm ${selectedRent.mode === 'return' ? "Return" : "Cancel"}`}
+                description={`Are you sure you want ${selectedRent.mode === 'return' ? 'to mark this rent as returned?' : 'to cancel this rent?'}`}
             />
         </div>
     );
