@@ -92,7 +92,7 @@
                         description: "Rent Created Successfully",
                         variant: "success"
                     })
-                    navigate('/rent-list')
+                    navigate('/')
                 } else {
                     toast({
                         title: "Error",
