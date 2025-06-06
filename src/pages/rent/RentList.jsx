@@ -303,7 +303,10 @@ const RentList = () => {
                                             <TableCell>{rent.returnDate ? formatDateTime(rent.returnDate, rent.outTime) : "Not Returned"}</TableCell>
                                             <TableCell>{calculateDays(rent.date)} days</TableCell>
                                             <TableCell>Rs.{calculateTotalRent(rent)}/-</TableCell>
-                                            <TableCell>Rs.{calculateClosingAmount(rent)}/-</TableCell>
+                                            <TableCell>{calculateClosingAmount(rent)<0?
+                                         <><p className="text-red-400 text-[15px]">Rs.{calculateClosingAmount(rent)}/-</p></>  
+                                        : <><p className="text-green-300 text-[15px]">Rs.{calculateClosingAmount(rent)}/-</p></>  
+                                        }</TableCell>
                                             <TableCell>
                                                 <div className="flex gap-2 items-center">
                                                     <Tooltip>

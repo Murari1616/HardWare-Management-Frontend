@@ -14,6 +14,7 @@ import {
  RentCreation,
  RentList
 } from "./lazyComponents.js";
+import SpeechTest from './pages/rent/SpeechTest'
 import { Toaster } from "./components/ui/toaster";
 import Loader from "./components/Loader/Loader.jsx";
 // import CurveWithMenu from "./pages/healthcare admin/CurveWithMenu.tsx";
@@ -67,6 +68,14 @@ const router = createBrowserRouter([
         element: (
           <Suspense fallback={<Loader />}>
             <RentList />
+          </Suspense>
+        ),
+      },
+      {
+        path: "speechTest",
+        element: (
+          <Suspense fallback={<Loader />}>
+            <SpeechTest />
           </Suspense>
         ),
       },
