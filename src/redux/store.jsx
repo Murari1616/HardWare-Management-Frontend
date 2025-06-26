@@ -4,6 +4,7 @@ import productSlice from "./features/productSlice";
 import typeSlice from "./features/typeSlice";
 import workSlice from "./features/workSlice";
 import rentSlice from "./features/rentSlice";
+import authSlice from './features/authSlice';
 // import healthcareAdminSlice from "./features/healthcareadminSlice";
 // import physioSlice from './features/physioSlice';
 // import appointmentSlice from "./features/appointmentbookingSlice";
@@ -18,6 +19,7 @@ const store = configureStore({
     types: typeSlice,
     works: workSlice,
     rent: rentSlice,
+    users:authSlice,
     // admin: healthcareAdminSlice,
     // physio: physioSlice,
     // appointment: appointmentSlice,

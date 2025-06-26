@@ -58,20 +58,20 @@ export const updateRent = createAsyncThunk(
 );
 
 // Get All Rents
-// export const getAllRents = createAsyncThunk("rents/getAll", async (_, { rejectWithValue }) => {
-//     try {
-//         const res = await fetch(`${BASE_URL}rent/getAllRents`,);
-//         const data = await res.json();
-//         if (data.success) return data;
-//         return rejectWithValue(data.message);
-//     } catch (error) {
-//         return rejectWithValue(error.message || "An error occurred");
-//     }
-// });
+export const getAllUnApprovedRents = createAsyncThunk("rents/getAllUnApprovedRents", async (_, { rejectWithValue }) => {
+    try {
+        const res = await fetch(`${BASE_URL}rent/getAllUnApprovedRents`,);
+        const data = await res.json();
+        if (data.success) return data;
+        return rejectWithValue(data.message);
+    } catch (error) {
+        return rejectWithValue(error.message || "An error occurred");
+    }
+});
 
 export const getAllRents = createAsyncThunk(
     "rents/getAllRents",
-    async ({ page = 1, limit = 20, search, date,days }, { rejectWithValue }) => {
+    async ({ page = 1, limit = 20, search, date, days }, { rejectWithValue }) => {
         try {
             let url = `${BASE_URL}rent/getAllRents?page=${page}&limit=${limit}`;
 
@@ -115,7 +115,7 @@ export const getAllRents = createAsyncThunk(
 
 // Delete Rent
 export const deleteRentById = createAsyncThunk("rents/delete", async (id, { rejectWithValue }) => {
-    console.log("ID",id)
+    console.log("ID", id)
     try {
         const res = await fetch(`${BASE_URL}rent/deleteRent/${id}`, { method: "DELETE", headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
         const data = await res.json();
@@ -164,6 +164,19 @@ const rentsSlice = createSlice({
                 state.error = action.payload;
                 state.status = "fail";
             })
+
+        builder
+            .addCase(getAllUnApprovedRents.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getAllUnApprovedRents.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.rents = action.payload.data;
+            })
+            .addCase(getAllUnApprovedRents.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
 
         // .addCase(getAllRents.fulfilled, (state, action) => { state.rents = action.payload.data; })
         // Get Appointment By ID

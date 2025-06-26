@@ -61,7 +61,6 @@ export default {
   		},
   		backgroundImage: {
         hero: "url('/assets')",
-        logo: "url('/assets/images/clinic-logo.jpg')"
       },
   		keyframes: {
   			scaleUpCenter: {

@@ -11,7 +11,6 @@ const initialState = {
 
 export const createWork = createAsyncThunk("works/create", async (workData, { rejectWithValue }) => {
   try {
-    console.log("WORLDATa",workData)
     const res = await fetch(`${BASE_URL}inventory/work/createWork`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

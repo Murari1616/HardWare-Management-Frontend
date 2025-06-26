@@ -31,7 +31,7 @@ export default function WorksTable() {
     <div className="w-full rounded-md bg-white p-4">
       {/* Dropdown */}
       <div className="w-full flex gap-2 x-2">
-        <Button className='lg:hidden md:hidden flex-row' onClick={()=>navigate('/productCreation')}><Plus/> Product Creation</Button>
+        <Button className='lg:hidden md:hidden flex-row' onClick={()=>navigate('/app/productCreation')}><Plus/> Product Creation</Button>
         <Controller
           name="product"
           control={control}

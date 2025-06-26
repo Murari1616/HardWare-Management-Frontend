@@ -5,3 +5,7 @@ export const ProductCreation = lazy(() => import("./pages/product/ProductCreatio
 export const Product = lazy(() => import("./pages/product/Product"));
 export const RentCreation = lazy(() => import("./pages/rent/RentCreation"));
 export const RentList = lazy(() => import("./pages/rent/RentList"));
+export const RulesPage = lazy(() => import("./pages/customer/RulesPage"));
+export const Login = lazy(() => import("./pages/auth/Login"));
+export const Register = lazy(() => import("./pages/auth/Register"));
+export const RentSuccess = lazy(() => import("./pages/rent/RentSuccess"));

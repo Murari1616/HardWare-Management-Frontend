@@ -18,6 +18,7 @@ const RentList = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
     const { rents, isLoading, totalPages, totalRecords, } = useSelector((state) => state.rent);
+    const approvedRents=rents.filter((rent)=> rent.approved==true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -92,7 +93,6 @@ const RentList = () => {
 
     const handleConfirm = () => {
         if (selectedRent && selectedRent.mode === 'return') {
-            console.log("HIHIH", selectedRent)
             handleSubmit(selectedRent.rent);
             setIsDialogOpen(false);
         }
@@ -107,7 +107,6 @@ const RentList = () => {
     const handleDelete = async (id) => {
         try {
             const response = await dispatch(deleteRentById(id));
-            console.log("RESPONSE", response)
             if (response.meta.requestStatus === 'fulfilled') {
                 toast({
                     title: "Success",
@@ -137,7 +136,6 @@ const RentList = () => {
             second: "2-digit",
             hour12: false,
         });
-        console.log("TEST", rent)
         const updatedRent = {
             ...rent,
             returnDate,
@@ -195,7 +193,7 @@ const RentList = () => {
             <div className="w-full h-full flex flex-col bg-white rounded-lg">
                 <div className="m-4 flex lg:flex-row md:flex-row flex-col lg:gap-4 md:gap-4 gap-2 justify-between">
                     <div className="flex w-full justify-between lg:px-4 md:px-4">
-                        <Button onClick={() => navigate('/rent-creation')}>
+                        <Button onClick={() => navigate('/app/rent-creation')}>
                             Rent Creation <Plus />
                         </Button>
                         <Input
@@ -281,8 +279,8 @@ const RentList = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {rents?.length > 0 ? (
-                                    rents.map((rent) => (
+                                {approvedRents?.length > 0 ? (
+                                    approvedRents.map((rent) => (
                                         <TableRow key={rent._id}>
                                             <TableCell>
                                                 <div className="flex gap-1">
@@ -359,7 +357,7 @@ const RentList = () => {
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan="13" className="text-center">
-                                            No rents found
+                                            No Rents found
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -370,7 +368,7 @@ const RentList = () => {
                 <div className="flex justify-between items-center py-4 mx-4">
                     <span>
                         Showing{" "}
-                        {rents.length ? pagination.pageIndex * pagination.pageSize + 1 : 0}-
+                        {approvedRents.length ? pagination.pageIndex * pagination.pageSize + 1 : 0}-
                         {Math.min(
                             (pagination.pageIndex + 1) * pagination.pageSize,
                             totalRecords || 0

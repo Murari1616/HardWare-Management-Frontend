@@ -1,26 +1,26 @@
 // @ts-nocheck
 import React, { useState } from "react";
 import { VersionSwitcher } from "@/components/VersionSwitcher";
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarFooter, 
-  SidebarGroup, 
-  SidebarGroupContent, 
-  SidebarHeader, 
-  SidebarMenu, 
-  SidebarMenuItem, 
-  SidebarRail, 
-  useSidebar 
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarRail,
+  useSidebar
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import { Drill,NotepadText } from "lucide-react";
+import { Drill, NotepadText } from "lucide-react";
 
 function AppSidebar({ ...props }) {
   const location = useLocation();
   const [expanded, setExpanded] = useState(null);
   const { setOpenMobile } = useSidebar();
-
+  const owner = localStorage.getItem('owner') == 100;
   const handleExpand = (title) => {
     setExpanded(expanded === title ? null : title);
   };
@@ -29,10 +29,11 @@ function AppSidebar({ ...props }) {
     {
       title: "Menu",
       url: "#",
-      items: [
-        // { title: "Product", url: "/pages/product-creation", icon: Dashboard, isActive: location.pathname === "/pages/dashboard" },
-        { title: "Product", url: "/product", icon: Drill, isActive: location.pathname === "/product-creation" },
-        { title: "Rent", url: "/rent-list", icon: NotepadText, isActive: location.pathname === "/rent-list" },
+      items:
+        owner
+        ?[
+        { title: "Product", url: "/app/product", icon: Drill, isActive: location.pathname === "/app/product-creation" },
+        { title: "Rent", url: "/app/rent-list", icon: NotepadText, isActive: location.pathname === "/app/rent-list" },
         // {
         //   title: "Clinic Setup",
         //   url: "#",
@@ -43,7 +44,11 @@ function AppSidebar({ ...props }) {
         //     { title: "Healthcare Admins", url: "/pages/admins-list", icon: HealthCareAdmin, isActive: location.pathname === "/pages/admins-list" },
         //   ],
         // },
-      ],
+      ]
+      :
+      [
+        { title: "Rent", url: "/app/rent-creation", icon: NotepadText, isActive: location.pathname === "/app/rent-creation" },
+      ]
     },
   ];
 
@@ -64,9 +69,8 @@ function AppSidebar({ ...props }) {
                       <SidebarMenuItem className="px-[5px]">
                         <Link
                           to={item.url}
-                          className={`flex gap-4 items-center px-4 py-2 rounded-md transition-all text-sm ${
-                            item.isActive ? "bg-primary-light text-primary" : "text-muted hover:bg-gray-100"
-                          }`}
+                          className={`flex gap-4 items-center px-4 py-2 rounded-md transition-all text-sm ${item.isActive ? "bg-primary-light text-primary" : "text-muted hover:bg-gray-100"
+                            }`}
                           onClick={() => {
                             item.Children && handleExpand(item.title);
                             setOpenMobile(false);
@@ -83,9 +87,8 @@ function AppSidebar({ ...props }) {
                               <Link
                                 onClick={() => setOpenMobile(false)}
                                 to={child.url}
-                                className={`flex gap-4 items-center px-4 py-2 rounded-md transition-all text-sm ${
-                                  child.isActive ? "bg-primary-light text-primary" : "text-muted hover:bg-gray-100"
-                                }`}
+                                className={`flex gap-4 items-center px-4 py-2 rounded-md transition-all text-sm ${child.isActive ? "bg-primary-light text-primary" : "text-muted hover:bg-gray-100"
+                                  }`}
                               >
                                 <child.icon className={`w-5 h-5 transition-all ${child.isActive ? "text-primary" : "text-gray-500"}`} />
                                 {child.title}
