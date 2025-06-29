@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +51,6 @@ const rentSchema = z.object({
     extras: z.string().optional(),
     extraCost: z.string().optional(),
     local: z.boolean().optional(),
-    approved: z.boolean().optional()
 });
 
 export default function RentDetails() {
@@ -86,13 +85,13 @@ export default function RentDetails() {
         if (!owner) {
             setPaymentData(data);
             setShowPopup(true);
-            console.log("HIHIH")
             return
         }
         const formattedData = {
             ...data,
             inTime: new Date().toLocaleTimeString("en-IN", { hour12: false }),
             Aadhar: data.Aadhar === "true",
+            approved:true
         };
 
         try {
@@ -350,10 +349,6 @@ export default function RentDetails() {
                                     <div className="w-[10%] flex gap-4">
                                         <Label>Local</Label>
                                         <input type="checkbox" {...register("local")} className="w-4 h-4 mt-2" />
-                                    </div>
-                                    <div className="w-[10%] flex gap-4">
-                                        <Label>Approved</Label>
-                                        <input type="checkbox" {...register("approved")} className="w-4 h-4 mt-2" />
                                     </div>
                                     <div className="flex flex-col mt-1">
                                         <div className="flex gap-4">

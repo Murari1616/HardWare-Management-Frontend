@@ -3,9 +3,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import rulesBackground from '../../assets/images/rulesBackground.png'
 
 const RulesPage = () => {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [agreed, setAgreed] = useState(false);
 
     const rules = [
@@ -32,7 +33,15 @@ const RulesPage = () => {
         {
             en: "6. Delivery charges will vary depending on the item.",
             te: "6. ప్రతి వస్తువు కోసం డెలివరీ ఛార్జీలు వేర్వేరుగా ఉంటాయి.",
-        }
+        },
+        {
+            en: "7. During delivery, you must show your local Aadhar card. If you don’t have one, someone else with a local Aadhar must be present.",
+            te: "7. డెలివరీ సమయంలో మీ లోకల్ ఆధార్ కార్డ్ చూపాలి. వద్ద లోకల్ ఆధార్ లేకపోతే, లోకల్ ఆధార్ ఉన్న ఇంకొకరు హాజరుండాలి.",
+        },
+        {
+            en: "8. Delivery charges vary based on the type of machine and the delivery distance.",
+            te: "8. డెలివరీ ఛార్జీలు మెషిన్ రకం మరియు డెలివరీ దూరాన్ని బట్టి మారవచ్చు.",
+        },
     ];
 
 
@@ -47,40 +56,43 @@ const RulesPage = () => {
     };
 
     return (
-        <div className="flex justify-center mx-4">
-        <div className="max-w-2xl  p-6 bg-white shadow  rounded-xl mt-6">
-            <h2 className="text-2xl font-bold flex w-full mb-4 justify-center">Rules & Regulations / నిబంధనలు</h2>
+        <div className="flex justify-center bg-cover bg-center"
+            style={{
+                backgroundImage: `url(${rulesBackground})`,
+            }}>
+            <div className="max-w-2xl  p-6 bg-white/90 shadow  rounded-xl mt-6 mb-16 mx-4">
+                <h2 className="text-2xl font-bold flex w-full mb-4 justify-center">Rules & Regulations / నిబంధనలు</h2>
 
-            <div className=" overflow-y-auto pr-2 mb-4">
-                {rules.map((rule, index) => (
-                    <div key={index} className="mb-3">
-                        <p className="text-base font-medium">{rule.en}</p>
-                        <p className="text-base text-gray-700">{rule.te}</p>
-                    </div>
-                ))}
+                <div className=" overflow-y-auto pr-2 mb-4">
+                    {rules.map((rule, index) => (
+                        <div key={index} className="mb-3">
+                            <p className="text-[14px] font-medium">{rule.en}</p>
+                            <p className="text-[14px] text-gray-700">{rule.te}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="flex items-center mb-4">
+                    <input
+                        type="checkbox"
+                        id="agreeCheckbox"
+                        checked={agreed}
+                        onChange={handleCheckboxChange}
+                        className="mr-2 w-4 h-4"
+                    />
+                    <Label htmlFor="agreeCheckbox">I agree to the above rules / నేను పై నిబంధనలను అంగీకరిస్తున్నాను</Label>
+                </div>
+
+                <Button
+                    type="button"
+                    onClick={handleButtonClick}
+                    disabled={!agreed}
+                    variant={agreed ? "default" : "outline"}
+                    className={`w-full ${!agreed ? "opacity-50 cursor-not-allowed" : ""}`}
+                >
+                    Proceed / కొనసాగించండి
+                </Button>
             </div>
-
-            <div className="flex items-center mb-4">
-                <input
-                    type="checkbox"
-                    id="agreeCheckbox"
-                    checked={agreed}
-                    onChange={handleCheckboxChange}
-                    className="mr-2 w-4 h-4"
-                />
-                <Label htmlFor="agreeCheckbox">I agree to the above rules / నేను పై నిబంధనలను అంగీకరిస్తున్నాను</Label>
-            </div>
-
-            <Button
-                type="button"
-                onClick={handleButtonClick}
-                disabled={!agreed}
-                variant={agreed ? "default" : "outline"}
-                className={`w-full ${!agreed ? "opacity-50 cursor-not-allowed" : ""}`}
-            >
-                Proceed / కొనసాగించండి
-            </Button>
-        </div>
         </div>
     );
 };

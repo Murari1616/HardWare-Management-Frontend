@@ -19,4 +19,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    'process.env': env, // inject env vars so they work in JS files like appConstants.js
+  },
 });

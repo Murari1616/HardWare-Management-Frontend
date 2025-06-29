@@ -4,6 +4,7 @@ import { BASE_URL } from "@/appConstants";
 
 const initialState = {
     rents: [],
+    unapprovedrents: [],
     isLoading: false,
     totalRecords: 0,
     currentPage: 1,
@@ -19,7 +20,9 @@ export const createRent = createAsyncThunk(
         try {
             const res = await fetch(`${BASE_URL}rent/createRent`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
                 body: JSON.stringify(rentData),
             });
             const data = await res.json();
@@ -38,8 +41,8 @@ export const createRent = createAsyncThunk(
 export const updateRent = createAsyncThunk(
     "rents/updateRent",
     async ({ id, updatedData }, { rejectWithValue }) => {
-        console.log("ID", id, updatedData)
         try {
+            console.log("UPDATED", updatedData)
             const res = await fetch(`${BASE_URL}rent/updateRent/${id}`, {
                 method: "PUT",
                 headers: {
@@ -60,7 +63,30 @@ export const updateRent = createAsyncThunk(
 // Get All Rents
 export const getAllUnApprovedRents = createAsyncThunk("rents/getAllUnApprovedRents", async (_, { rejectWithValue }) => {
     try {
-        const res = await fetch(`${BASE_URL}rent/getAllUnApprovedRents`,);
+        const res = await fetch(`${BASE_URL}rent/getAllUnApprovedRents`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        );
+        const data = await res.json();
+        if (data.success) return data;
+        return rejectWithValue(data.message);
+    } catch (error) {
+        return rejectWithValue(error.message || "An error occurred");
+    }
+});
+export const getAllRentsByName = createAsyncThunk("rents/getAllRentsByName", async (name, { rejectWithValue }) => {
+    try {
+        const res = await fetch(`${BASE_URL}rent/getAllRentsByName?name=${encodeURIComponent(name)}`, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
         const data = await res.json();
         if (data.success) return data;
         return rejectWithValue(data.message);
@@ -171,9 +197,21 @@ const rentsSlice = createSlice({
             })
             .addCase(getAllUnApprovedRents.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.rents = action.payload.data;
+                state.unapprovedrents = action.payload.data;
             })
             .addCase(getAllUnApprovedRents.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
+        builder
+            .addCase(getAllRentsByName.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getAllRentsByName.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.rents = action.payload.data;
+            })
+            .addCase(getAllRentsByName.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             });

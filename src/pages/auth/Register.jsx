@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import "react-clock/dist/Clock.css";
 import { useDispatch } from "react-redux";
 import * as z from "zod";
 import { useToast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import Location from "./Location";
 import { useState } from "react";
@@ -208,7 +208,8 @@ export default function Register() {
                             </div>
 
                         </div>
-                        <div className="w-full flex justify-end">
+                        <div className="w-full flex justify-between items-center gap-12">
+                            <Link className="text-black underline hover:text-white w-full text-nowrap" to={'/'}>...back to login</Link>
                             <Button type="submit" className="lg:w-[20%] md:w-[12%] w-full">Register</Button>
                         </div>
                     </form>

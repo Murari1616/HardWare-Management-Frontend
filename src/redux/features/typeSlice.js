@@ -13,11 +13,13 @@ export const createType = createAsyncThunk("types/create", async (typeData, { re
   try {
     const res = await fetch(`${BASE_URL}inventory/type/createType`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify(typeData),
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return data;
     } else {
@@ -37,7 +39,7 @@ export const getAllTypesByProductId = createAsyncThunk("types/getAllByProductId"
       },
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return data.data || [];
     } else {
@@ -57,7 +59,7 @@ export const deleteTypeById = createAsyncThunk("types/delete", async (id, { reje
       },
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return id;
     } else {

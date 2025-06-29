@@ -13,11 +13,13 @@ export const createWork = createAsyncThunk("works/create", async (workData, { re
   try {
     const res = await fetch(`${BASE_URL}inventory/work/createWork`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify(workData),
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return data;
     } else {
@@ -32,9 +34,12 @@ export const getAllWorksByProductId = createAsyncThunk("works/getAllByProductId"
   try {
     const res = await fetch(`${BASE_URL}inventory/work/getAllWorksByProductId/${productId}`, {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return data.data || [];
     } else {
@@ -47,11 +52,16 @@ export const getAllWorksByProductId = createAsyncThunk("works/getAllByProductId"
 
 export const getAllWorkByProductAndTypeId = createAsyncThunk(
   "works/getAllWorkByProductAndTypeId",
-  async ({ productId, typeId }, { rejectWithValue }) => { 
+  async ({ productId, typeId }, { rejectWithValue }) => {
     try {
       const res = await fetch(
         `${BASE_URL}inventory/work/getAllWorkByProductAndTypeId/${productId}/${typeId}`,
-        { method: "GET" }
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       const data = await res.json();
 
@@ -76,7 +86,7 @@ export const deleteWorkById = createAsyncThunk("works/delete", async (id, { reje
       },
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return id;
     } else {
@@ -91,10 +101,13 @@ export const getWorkById = createAsyncThunk("works/get", async (id, { rejectWith
   try {
     const res = await fetch(`${BASE_URL}inventory/work/getWorkById/${id}`, {
       method: "GET",
-      
+      headers: {
+        "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+
     });
     const data = await res.json();
-    
+
     if (data.success) {
       return data.data;
     } else {
@@ -175,7 +188,7 @@ const worksSlice = createSlice({
       })
       .addCase(getWorkById.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.works =[action.payload];
+        state.works = [action.payload];
       })
       .addCase(getWorkById.rejected, (state, action) => {
         state.isLoading = false;

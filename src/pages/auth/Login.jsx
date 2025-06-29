@@ -10,7 +10,9 @@ import { useToast } from "@/hooks/use-toast";
 import appLogo from '../../assets/images/appLogo.png';
 import background from '../../assets/images/hardware-background.jpg'
 import { login } from "@/redux/features/authSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 // import { loginUser } from "@/redux/features/authSlice";
 
 const loginSchema = z.object({
@@ -22,6 +24,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [see, setSee] = useState(false);
 
   const {
     register,
@@ -75,18 +78,28 @@ const Login = () => {
 
         <div>
           <Label className='text-gray-200 mb-1'>Password</Label>
-          <Input
-            type="password"
-            {...register("password")}
-            placeholder="Enter your password"
-            className='text-white'
-          />
+          <div className="relative">
+            <Input
+              type={see ? "text" : "password"}
+              {...register("password")}
+              placeholder="Enter your password"
+              className='text-white'
+            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+              onClick={() => setSee(!see)}
+            >
+              {see ? <EyeOff size={20} color='white'/> : <Eye color='white' size={20} />}
+            </button>
+          </div>
           {errors.password && (
             <p className="text-red-500 text-xs">{errors.password.message}</p>
           )}
         </div>
 
         <Button onClick={handleSubmit(onSubmit)}>Login</Button>
+        <Link to={'/customer-register'} className="flex justify-center gap-2 text-gray-900">New Customer? <p className="text-primary text-base">SignUp</p></Link>
       </div>
     </div>
   );

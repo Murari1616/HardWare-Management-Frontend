@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { deleteRentById, getAllRents, updateRent } from "@/redux/features/rentSlice";
+import { deleteRentById, emptyError, emptyStatus, getAllRents, updateRent } from "@/redux/features/rentSlice";
 import { Ellipsis, Loader, Plus, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,8 +17,8 @@ const RentList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { toast } = useToast();
-    const { rents, isLoading, totalPages, totalRecords, } = useSelector((state) => state.rent);
-    const approvedRents=rents.filter((rent)=> rent.approved==true);
+    const { rents, isLoading, totalPages, totalRecords, error } = useSelector((state) => state.rent);
+    const approvedRents = rents.filter((rent) => rent.approved == true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [pagination, setPagination] = useState({
         pageIndex: 0,
@@ -126,8 +126,11 @@ const RentList = () => {
         }
     }
 
+    const onClose = () => {
+        setIsDialogOpen(false);
+    }
 
-    // Submit function to mark rent as returned
+
     const handleSubmit = async (rent) => {
         const returnDate = new Date().toISOString().split("T")[0];
         const outTime = new Date().toLocaleTimeString("en-US", {
@@ -147,7 +150,7 @@ const RentList = () => {
         try {
             const response = await dispatch(updateRent({ id: rent._id, updatedData: updatedRent }));
 
-            if (updateRent.fulfilled.match(response)) { // ✅ Correctly checking if update was successful
+            if (updateRent.fulfilled.match(response)) { 
                 toast({
                     title: "Success",
                     description: "Returned Successfully",
@@ -183,6 +186,26 @@ const RentList = () => {
     }, [pagination.pageIndex,
     pagination.pageSize,
         searchQuery, selectedDate, selectedDays]);
+
+    useEffect(() => {
+        if (status === null) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "No Rents Found",
+            });
+            dispatch(emptyStatus());
+        }
+        if (status === "fail" || error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: error,
+            });
+            dispatch(emptyError());
+            dispatch(emptyStatus());
+        }
+    }, [status, error]);
 
     if (isLoading) {
         return (<div className="mt-72"><Loader /></div>)
@@ -301,10 +324,10 @@ const RentList = () => {
                                             <TableCell>{rent.returnDate ? formatDateTime(rent.returnDate, rent.outTime) : "Not Returned"}</TableCell>
                                             <TableCell>{calculateDays(rent.date)} days</TableCell>
                                             <TableCell>Rs.{calculateTotalRent(rent)}/-</TableCell>
-                                            <TableCell>{calculateClosingAmount(rent)<0?
-                                         <><p className="text-red-400 text-[15px]">Rs.{calculateClosingAmount(rent)}/-</p></>  
-                                        : <><p className="text-green-300 text-[15px]">Rs.{calculateClosingAmount(rent)}/-</p></>  
-                                        }</TableCell>
+                                            <TableCell>{calculateClosingAmount(rent) < 0 ?
+                                                <><p className="text-red-400 text-[15px]">Rs.{calculateClosingAmount(rent)}/-</p></>
+                                                : <><p className="text-green-300 text-[15px]">Rs.{calculateClosingAmount(rent)}/-</p></>
+                                            }</TableCell>
                                             <TableCell>
                                                 <div className="flex gap-2 items-center">
                                                     <Tooltip>
@@ -422,7 +445,7 @@ const RentList = () => {
             {/* Confirmation Dialog */}
             <ConfirmDialog
                 isOpen={isDialogOpen}
-                onClose={() => setIsDialogOpen(false)}
+                onClose={onClose}
                 onConfirm={handleConfirm}
                 title={`Confirm ${selectedRent.mode === 'return' ? "Return" : "Cancel"}`}
                 description={`Are you sure you want ${selectedRent.mode === 'return' ? 'to mark this rent as returned?' : 'to cancel this rent?'}`}

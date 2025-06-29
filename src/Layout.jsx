@@ -38,20 +38,11 @@ const Layout = () => {
   return (
     <div className="h-[99vh] w-full">
       <SidebarProvider>
-        {/* {localStorage.getItem("mode") === "dashboard" ? */}
         <AppSidebar />
-        {/* //  : null} */}
         <SidebarInset>
           <header className="flex justify-between sticky top-0 bg-white dark:bg-black dark:text-white dark:border-b dark:border-gray-600 h-14 shrink-0 items-center gap-2 px-4 font-poppins z-10">
             <div className="flex gap-3">
-              {/* {localStorage.getItem("mode") === "home" && (
-                <>
-                  <AppDropdown />
-                </>
-              )} */}
-              {/* {localStorage.getItem("mode") === "dashboard" &&  */}
               <SidebarTrigger
-              // className="-ml-1" 
               />
             </div>
             <div className="flex items-center gap-8 mr-4">

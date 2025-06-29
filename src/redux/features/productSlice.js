@@ -17,12 +17,15 @@ export const createProduct = createAsyncThunk(
         try {
             const res = await fetch(`${BASE_URL}inventory/product/createProduct`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
                 body: JSON.stringify(productData),
             });
             const data = await res.json();
             if (data.success) {
-                
+
                 return data;
             }
             return rejectWithValue(data.message);
@@ -36,7 +39,13 @@ export const createProduct = createAsyncThunk(
 // Get All Products
 export const getAllProducts = createAsyncThunk("products/getAll", async (_, { rejectWithValue }) => {
     try {
-        const res = await fetch(`${BASE_URL}inventory/product/getAllProducts`, );
+        const res = await fetch(`${BASE_URL}inventory/product/getAllProducts`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
         const data = await res.json();
         if (data.success) return data;
         return rejectWithValue(data.message);

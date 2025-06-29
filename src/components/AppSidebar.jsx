@@ -14,7 +14,7 @@ import {
   useSidebar
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import { Drill, NotepadText } from "lucide-react";
+import { Drill, NotepadText, ReceiptText } from "lucide-react";
 
 function AppSidebar({ ...props }) {
   const location = useLocation();
@@ -48,6 +48,7 @@ function AppSidebar({ ...props }) {
       :
       [
         { title: "Rent", url: "/app/rent-creation", icon: NotepadText, isActive: location.pathname === "/app/rent-creation" },
+        { title: "Order", url: "/app/order-history", icon: ReceiptText, isActive: location.pathname === "/app/order-history" },
       ]
     },
   ];

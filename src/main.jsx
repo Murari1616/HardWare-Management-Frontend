@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-rou
 import Layout from "./Layout.jsx";
 import NotFound from "./components/NotFound";
 import store from "./redux/store.jsx";
-import { ProductCreation, Product, RentCreation, RentList, RulesPage, Login, Register, RentSuccess } from "./lazyComponents.js";
+import { ProductCreation, Product, RentCreation, RentList, RulesPage, Login, Register, RentSuccess, OrderHistory } from "./lazyComponents.js";
 import Loader from "./components/Loader/Loader.jsx";
 import { Toaster } from "./components/ui/toaster";
 import Location from "./pages/auth/Location";
@@ -109,6 +109,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={<Loader />}>
                 <RentList />
+              </Suspense>
+            ),
+          },
+          {
+            path: "order-history",
+            element: (
+              <Suspense fallback={<Loader />}>
+                <OrderHistory />
               </Suspense>
             ),
           },
