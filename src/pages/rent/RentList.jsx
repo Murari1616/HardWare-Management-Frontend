@@ -17,7 +17,7 @@ const RentList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { toast } = useToast();
-    const { rents, isLoading, totalPages, totalRecords, error } = useSelector((state) => state.rent);
+    const { rents, isLoading, totalPages, totalRecords, error, status } = useSelector((state) => state.rent);
     const approvedRents = rents.filter((rent) => rent.approved == true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [pagination, setPagination] = useState({
@@ -150,7 +150,7 @@ const RentList = () => {
         try {
             const response = await dispatch(updateRent({ id: rent._id, updatedData: updatedRent }));
 
-            if (updateRent.fulfilled.match(response)) { 
+            if (updateRent.fulfilled.match(response)) {
                 toast({
                     title: "Success",
                     description: "Returned Successfully",
@@ -189,11 +189,7 @@ const RentList = () => {
 
     useEffect(() => {
         if (status === null) {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "No Rents Found",
-            });
+
             dispatch(emptyStatus());
         }
         if (status === "fail" || error) {

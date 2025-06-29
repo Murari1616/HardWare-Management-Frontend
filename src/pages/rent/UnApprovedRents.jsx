@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const UnApprovedRents = ({ onClose }) => {
     const dispatch = useDispatch();
-    const { unapprovedrents: rents } = useSelector((state) => state.rent);
+    const { unapprovedrents: rents,error,status } = useSelector((state) => state.rent);
     const [rentStates, setRentStates] = useState([]);
 
     const { toast } = useToast();
@@ -83,11 +83,7 @@ const UnApprovedRents = ({ onClose }) => {
 
     useEffect(() => {
             if (status === null) {
-                toast({
-                    variant: "destructive",
-                    title: "Error",
-                    description: "No Rents Found",
-                });
+                
                 dispatch(emptyStatus());
             }
             if (status === "fail" || error) {
