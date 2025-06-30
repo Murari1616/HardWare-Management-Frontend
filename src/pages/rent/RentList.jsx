@@ -5,13 +5,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { deleteRentById, emptyError, emptyStatus, getAllRents, updateRent } from "@/redux/features/rentSlice";
-import { Ellipsis, Loader, Plus, SearchIcon } from "lucide-react";
+import { Ellipsis, Plus, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ConfirmDialog from "@/components/ConfirmDilaog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import Loader from "@/components/Loader/Loader";
 
 const RentList = () => {
     const dispatch = useDispatch();
@@ -203,9 +204,9 @@ const RentList = () => {
         }
     }, [status, error]);
 
-    if (isLoading) {
-        return (<div className="mt-72"><Loader /></div>)
-    }
+    // if (isLoading) {
+    //     return (<div className="mt-72"><Loader/></div>)
+    // }
 
     return (
         <div className="w-full h-full">
@@ -277,7 +278,7 @@ const RentList = () => {
                 <div className="w-full h-full rounded-md bg-white px-4">
                     {/* Table */}
                     {isLoading ? (
-                        <p>Loading...</p>
+                        <><Loader/></>
                     ) : (
                         <Table className="w-full">
                             <TableHeader className="bg-muted-light hover:bg-transparent">
